@@ -43,7 +43,8 @@ public class SensorListenerManager implements ESenseSensorListener {
 
     public SensorListenerManager(Context context){
         this.context = context;
-        eSenseConfig = new ESenseConfig();
+        // specify configuration values
+        eSenseConfig = new ESenseConfig(ESenseConfig.AccRange.G_4, ESenseConfig.GyroRange.DEG_1000, ESenseConfig.AccLPF.BW_10, ESenseConfig.GyroLPF.BW_10);
         rowIndex = 1;
         activityIndex = -1;
         activityName = "";

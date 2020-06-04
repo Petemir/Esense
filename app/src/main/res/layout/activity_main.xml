@@ -78,13 +78,13 @@
         android:textColor="#000000"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/headShakeButton"
+        app:layout_constraintEnd_toEndOf="@+id/experimentButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view4" />
 
     <Button
         android:id="@+id/speakingButton"
-        android:layout_width="110dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -99,7 +99,7 @@
 
     <Button
         android:id="@+id/eatingButton"
-        android:layout_width="110dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -114,7 +114,7 @@
 
     <Button
         android:id="@+id/noddingButton"
-        android:layout_width="110dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -127,22 +127,36 @@
         app:layout_constraintTop_toBottomOf="@+id/speakingButton" />
 
     <Button
-        android:id="@+id/headShakeButton"
-        android:layout_width="110dp"
+        android:id="@+id/experimentButton"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/custom_button"
-        android:drawableLeft="@drawable/headshake"
-        android:text="Head Shake"
+        android:drawableLeft="@drawable/experiment"
+        android:text="Experiment"
         android:textAllCaps="false"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view4" />
 
     <Button
+        android:id="@+id/headShakeButton"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/custom_button"
+        android:drawableLeft="@drawable/headshake"
+        android:text="Head Shake"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/experimentButton" />
+
+    <Button
         android:id="@+id/stayButton"
-        android:layout_width="110dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -156,7 +170,7 @@
 
     <Button
         android:id="@+id/speak_walk_button"
-        android:layout_width="110dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -170,7 +184,7 @@
 
     <Button
         android:id="@+id/walkButton"
-        android:layout_width="110dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -181,6 +195,8 @@
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eatingButton" />
+
+
 
     <TextView
         android:id="@+id/activityTV"
@@ -221,20 +237,23 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.656"
         app:layout_constraintStart_toEndOf="@+id/noddingButton"
         app:layout_constraintTop_toBottomOf="@+id/speakingButton" />
 
     <ListView
         android:id="@+id/activityListView"
-        android:layout_width="250dp"
-        android:layout_height="0dp"
+        android:layout_width="232dp"
+        android:layout_height="430dp"
         android:layout_marginStart="44dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/noddingButton"
-        app:layout_constraintTop_toBottomOf="@+id/activityhistoryTV" />
+        app:layout_constraintTop_toBottomOf="@+id/activityhistoryTV"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ToggleButton
         android:id="@+id/recordButton"
@@ -250,10 +269,9 @@
         android:textOn=""
         app:layout_constraintBottom_toTopOf="@+id/chronometer"
         app:layout_constraintEnd_toEndOf="@+id/chronometer"
-        app:layout_constraintHorizontal_bias="0.486"
         app:layout_constraintStart_toStartOf="@+id/chronometer"
         app:layout_constraintTop_toBottomOf="@+id/activityTV"
-        app:layout_constraintVertical_bias="0.566" />
+        app:layout_constraintVertical_bias="0.673" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -264,7 +282,52 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toStartOf="@+id/statusImage"
-        app:layout_constraintStart_toEndOf="@+id/connectButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/connectButton" />
+
+    <TextView
+        android:id="@+id/timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Timestamp"
+        android:textColor="#4CAF50"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/activitiesTV"
+        app:layout_constraintEnd_toEndOf="@+id/timestampText"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="@+id/timestampText"
+        app:layout_constraintTop_toBottomOf="@+id/view4"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ToggleButton
+        android:id="@+id/timestampButton"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/stopwatch"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="Record"
+        android:textOff=""
+        android:textOn=""
+        app:layout_constraintBottom_toTopOf="@+id/timestampText"
+        app:layout_constraintEnd_toEndOf="@+id/timestampText"
+        app:layout_constraintHorizontal_bias="0.531"
+        app:layout_constraintStart_toStartOf="@+id/timestampText"
+        app:layout_constraintTop_toBottomOf="@+id/timestamp" />
+
+    <TextView
+        android:id="@+id/timestampText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="148dp"
+        android:text="OFF"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timestampButton" />
+
 
 </android.support.constraint.ConstraintLayout>

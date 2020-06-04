@@ -8,13 +8,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,20 +31,20 @@ import com.sozolab.sumon.io.esense.esenselib.ESenseManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
-import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String TAG = "Esense";
-    private String deviceName = "eSense-0181";  // "eSense-0598"
+    private String deviceName = "eSense-0308";  // "eSense-0598"
     private String activityName = "Activity";
     private int timeout = 30000;
 
     private Button connectButton;
+    private Button experimentButton;
     private Button headShakeButton;
     private Button speakingButton;
     private Button noddingButton;
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button speakWalkButton;
     private ListView activityListView;
     private Chronometer chronometer;
+    private ToggleButton timestampButton;
     private ToggleButton recordButton;
 
     private TextView connectionTextView;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         recordButton = (ToggleButton) findViewById(R.id.recordButton);
         connectButton =  (Button) findViewById(R.id.connectButton);
+        experimentButton = (Button) findViewById(R.id.experimentButton);
         headShakeButton = (Button) findViewById(R.id.headShakeButton);
         speakingButton = (Button) findViewById(R.id.speakingButton);
         noddingButton = (Button) findViewById(R.id.noddingButton);
@@ -98,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         recordButton.setOnClickListener(this);
         connectButton.setOnClickListener(this);
+        experimentButton.setOnClickListener(this);
         headShakeButton.setOnClickListener(this);
         speakingButton.setOnClickListener(this);
         noddingButton.setOnClickListener(this);
@@ -174,6 +177,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.connectButton:
                 progressBar.setVisibility(View.VISIBLE);
                 connectEarables();
+                break;
+
+            case R.id.experimentButton:
+                activityName = "Experiment";
+                sharedPrefEditor.putString("activityName", activityName);
+                sharedPrefEditor.commit();
+                setActivityName();
                 break;
 
             case R.id.headShakeButton:
