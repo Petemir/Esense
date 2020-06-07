@@ -39,8 +39,9 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String TAG = "Esense";
-    private String deviceName = "eSense-0308";  // "eSense-0598"
+    private String deviceName = "eSense-0308";  // CHANGE HERE FOR DIFFERENT DEVICE
     private String activityName = "Activity";
+    private boolean recordingStatus = false;
     private int timeout = 30000;
 
     private Button connectButton;
@@ -54,12 +55,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button speakWalkButton;
     private ListView activityListView;
     private Chronometer chronometer;
-    private ToggleButton timestampButton;
+    private ToggleButton onOffButton;
     private ToggleButton recordButton;
 
     private TextView connectionTextView;
     private TextView deviceNameTextView;
     private TextView activityTextView;
+    private TextView onOffTextView;
     private ImageView statusImageView;
     private ProgressBar progressBar;
     private SharedPreferences sharedPreferences;
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SensorListenerManager sensorListenerManager;
     ConnectionListenerManager connectionListenerManager;
     private static final int PERMISSION_REQUEST_CODE = 200;
+    private static String onOffName = "OFF";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sharedPrefEditor = sharedPreferences.edit();
 
         recordButton = (ToggleButton) findViewById(R.id.recordButton);
+        onOffButton = (ToggleButton) findViewById(R.id.onOffButton);
         connectButton =  (Button) findViewById(R.id.connectButton);
         experimentButton = (Button) findViewById(R.id.experimentButton);
         headShakeButton = (Button) findViewById(R.id.headShakeButton);
@@ -99,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         speakWalkButton = (Button) findViewById(R.id.speak_walk_button);
 
         recordButton.setOnClickListener(this);
+        onOffButton.setOnClickListener(this);
         connectButton.setOnClickListener(this);
         experimentButton.setOnClickListener(this);
         headShakeButton.setOnClickListener(this);
@@ -112,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         statusImageView = (ImageView) findViewById(R.id.statusImage);
         connectionTextView = (TextView) findViewById(R.id.connectionTV);
         deviceNameTextView = (TextView) findViewById(R.id.deviceNameTV);
+        onOffTextView = (TextView) findViewById(R.id.onOffTV);
         activityTextView = (TextView) findViewById(R.id.activityTV);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         chronometer = (Chronometer) findViewById(R.id.chronometer);
@@ -235,80 +241,104 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setActivityName();
                 break;
 
-            case R.id.recordButton:
-                if(recordButton.isChecked()) {
+            case R.id.onOffButton:
+                if(recordingStatus) {
+                    if (onOffName.equals("OFF")) {
+                        onOffName = "ON ";
+                        setOnOffName();
 
-                    if(activityName.equals("Activity")){
-                        recordButton.setChecked(false);
-                        showAlertMessage();
-                    }else{
+                    } else {
+                        onOffName = "OFF";
+                        setOnOffName();
 
-                        activityObj = new Activity();
-
-                        currentTime = Calendar.getInstance();
-                        int hour = currentTime.get(Calendar.HOUR_OF_DAY) ;
-                        int minute = currentTime.get(Calendar.MINUTE);
-                        int second = currentTime.get(Calendar.SECOND);
-
-                        chronometer.setBase(SystemClock.elapsedRealtime());
-                        chronometer.start();
-
-                        if(activityObj != null){
-                            String startTime = hour + " : " + minute + " : " + second;
-                            activityObj.setActivityName(activityName);
-                            activityObj.setStartTime(startTime);
-                        }
-
-                        sharedPrefEditor.putString("checked", "on");
-                        sharedPrefEditor.commit();
-                        recordButton.setBackgroundResource(R.drawable.stop);
-
-                        audioRecordServiceIntent.putExtra("activity", activityName);
-
-                        startDataCollection(activityName);
-                        startService(audioRecordServiceIntent);
                     }
+                }else{
+                    onOffName = "OFF";
+                    setOnOffName();
+                    showOnOffAlertMessage();
+                }
+                break;
 
+
+            case R.id.recordButton:
+                if (recordButton.isChecked()) {
+
+                if (activityName.equals("Activity")) {
+                    recordButton.setChecked(false);
+                    showAlertMessage();
                 } else {
 
+                    recordingStatus = true;
+
+                    activityObj = new Activity();
+
                     currentTime = Calendar.getInstance();
-                    int hour = currentTime.get(Calendar.HOUR_OF_DAY) ;
+                    int hour = currentTime.get(Calendar.HOUR_OF_DAY);
                     int minute = currentTime.get(Calendar.MINUTE);
                     int second = currentTime.get(Calendar.SECOND);
 
-                    chronometer.stop();
+                    chronometer.setBase(SystemClock.elapsedRealtime());
+                    chronometer.start();
 
-                    if(activityObj != null){
-                        String stopTime = hour + " : " + minute + " : " + second;
-                        String duration = chronometer.getText().toString();
-                        activityObj.setStopTime(stopTime);
-                        activityObj.setDuration(duration);
+                    if (activityObj != null) {
+                        String startTime = hour + " : " + minute + " : " + second;
+                        activityObj.setActivityName(activityName);
+                        activityObj.setStartTime(startTime);
                     }
 
-                    sharedPrefEditor.putString("checked", "off");
+                    sharedPrefEditor.putString("checked", "on");
                     sharedPrefEditor.commit();
-                    recordButton.setBackgroundResource(R.drawable.start);
+                    recordButton.setBackgroundResource(R.drawable.stop);
 
-                    stopDataCollection();
-                    stopService(audioRecordServiceIntent);
+                    audioRecordServiceIntent.putExtra("activity", activityName);
 
-                    if(databaseHandler != null){
-                        if(activityObj != null){
-                            databaseHandler.addActivity(activityObj);
-                            ArrayList<Activity> activityHistory = databaseHandler.getAllActivities();
-                            activityListView.setAdapter(new ActivityListAdapter(this, activityHistory));
+                    startDataCollection(activityName);
+                    startService(audioRecordServiceIntent);
+                }
 
-                            for (Activity activity : activityHistory) {
-                                String activityLog = "Activity : " + activity.getActivityName() + " , Start Time : " + activity.getStartTime()
-                                        + " , Stop Time : " + activity.getStopTime() + " , Duration : " + activity.getDuration();
-                                Log.d(TAG, activityLog);
-                            }
+            } else {
+
+                recordingStatus = false;
+
+                currentTime = Calendar.getInstance();
+                int hour = currentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = currentTime.get(Calendar.MINUTE);
+                int second = currentTime.get(Calendar.SECOND);
+
+                chronometer.stop();
+                onOffName = "OFF";
+
+                if (activityObj != null) {
+                    String stopTime = hour + " : " + minute + " : " + second;
+                    String duration = chronometer.getText().toString();
+                    activityObj.setStopTime(stopTime);
+                    activityObj.setDuration(duration);
+                }
+
+                sharedPrefEditor.putString("checked", "off");
+                sharedPrefEditor.commit();
+                recordButton.setBackgroundResource(R.drawable.start);
+
+                stopDataCollection();
+                stopService(audioRecordServiceIntent);
+
+                if (databaseHandler != null) {
+                    if (activityObj != null) {
+                        databaseHandler.addActivity(activityObj);
+                        ArrayList<Activity> activityHistory = databaseHandler.getAllActivities();
+                        activityListView.setAdapter(new ActivityListAdapter(this, activityHistory));
+
+                        for (Activity activity : activityHistory) {
+                            String activityLog = "Activity : " + activity.getActivityName() + " , Start Time : " + activity.getStartTime()
+                                    + " , Stop Time : " + activity.getStopTime() + " , Duration : " + activity.getDuration();
+                            Log.d(TAG, activityLog);
                         }
                     }
-
-                    activityObj = null;
                 }
-                break;
+
+                activityObj = null;
+            }
+            break;
         }
     }
 
@@ -383,7 +413,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void setActivityName(){
         activityTextView.setText(activityName);
+    }
 
+    public static String getOnOffName(){
+        return onOffName;
+    }
+
+    public void setOnOffName(){
+        onOffTextView.setText(onOffName);
     }
     public void connectEarables(){
         eSenseManager.connect(timeout);
@@ -461,6 +498,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void showAlertMessage(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Please select an activityName !")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void showOnOffAlertMessage(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Please start recording first !")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void showConnectedAlertMessage(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Please connect the eSense device first !")
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

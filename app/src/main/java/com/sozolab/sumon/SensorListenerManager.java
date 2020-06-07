@@ -21,6 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+
+
 public class SensorListenerManager implements ESenseSensorListener {
 
     private final String TAG = "SensorListenerManager";
@@ -39,7 +41,9 @@ public class SensorListenerManager implements ESenseSensorListener {
     ESenseConfig eSenseConfig;
     String dataDirPath;
     String activityName;
+    String onOffName;
     int activityIndex;
+
 
     public SensorListenerManager(Context context){
         this.context = context;
@@ -48,6 +52,7 @@ public class SensorListenerManager implements ESenseSensorListener {
         rowIndex = 1;
         activityIndex = -1;
         activityName = "";
+        onOffName = "";
         sheetName = "";
         excelSheet = null;
         excelFile = null;
@@ -72,6 +77,7 @@ public class SensorListenerManager implements ESenseSensorListener {
                 timeStamp = evt.getTimestamp();
                 accel = evt.convertAccToG(eSenseConfig);
                 gyro = evt.convertGyroToDegPerSecond(eSenseConfig);
+                onOffName = MainActivity.getOnOffName();
 
                 Row dataRow = excelSheet.createRow(rowIndex);
                 Cell dataCell = null;
@@ -102,8 +108,12 @@ public class SensorListenerManager implements ESenseSensorListener {
                 dataCell = dataRow.createCell(8);
                 dataCell.setCellValue(activityName);
 
+                dataCell = dataRow.createCell(9);
+                dataCell.setCellValue(onOffName);
+
                 String sensorData = "Index : " + activityIndex + " Activity : " + activityName + " Row : " + rowIndex + " Time : " + timeStamp
-                        + " accel : " + accel[0] + " " + accel[1] + " " + accel[2] + " gyro : " + gyro[0] + " " + gyro[1] + " " + gyro[2];
+                        + " accel : " + accel[0] + " " + accel[1] + " " + accel[2] + " gyro : " + gyro[0] + " " + gyro[1] + " " + gyro[2]
+                        + " onOff : " + onOffName;
                 Log.d(TAG, sensorData);
             }
         }
@@ -119,6 +129,7 @@ public class SensorListenerManager implements ESenseSensorListener {
         sheet.setColumnWidth(6, (15 * 300));
         sheet.setColumnWidth(7, (15 * 300));
         sheet.setColumnWidth(8, (15 * 300));
+        sheet.setColumnWidth(9, (15 * 300));
     }
 
     public void startDataCollection(String activity) {
@@ -187,6 +198,9 @@ public class SensorListenerManager implements ESenseSensorListener {
                 break;
             case "Staying":
                 index = 6;
+                break;
+            case "Experiment":
+                index = 7;
                 break;
         }
 
