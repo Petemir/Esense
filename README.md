@@ -31,4 +31,4 @@ The accelerometer and gyroscope data is saved in mobile storage as **.csv** form
 # Add Ons
 As an extension of the work by [Shafiqul Islam](https://github.com/shafiqulislamsumon/Esense) the app now allows recording data labeled as "Experiment". The exported data is marked with this label and a corresponding number which allows easy discrimination of recording states for further processing (i.e. "Experiment" vs "Walking" data). 
 Additionally, a new button was created that labels data as collected during the "ON" vs "OFF" period. This functionality can be used to section different parts of one recording (i.e. one recording containing several smaller parts with transition periods).  
-<img src="https://github.com/images/app_with_onOff_experiment.png" alt="App screenshot" width="360" hight="640"/>
+<img src="https://github.com/SabrinaFrohn/Esense/tree/master/images/app_with_onOff_experiment.png" alt="App screenshot" width="360" hight="640"/>
