@@ -39,7 +39,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String TAG = "Esense";
-    private String deviceName = "eSense-0308";  // CHANGE HERE FOR DIFFERENT DEVICE
+    private String deviceName = "eSense-0237";  // CHANGE HERE FOR DIFFERENT DEVICE
     private String activityName = "Activity";
     private boolean recordingStatus = false;
     private int timeout = 30000;
